@@ -7,5 +7,5 @@ def owner(accounts):
 
 
 @pytest.fixture
-def box(owner, project):
-    return owner.deploy(project.Box)
+def djt(owner, project):
+    return owner.deploy(project.DJT)

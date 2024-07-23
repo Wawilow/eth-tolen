@@ -19,6 +19,8 @@ Init ape project
 ```bash
 ape init
 ape plugins install solidity
+ape plugins install etherscan
+ape plugins install tokens
 ```
 
 Go to testnet console
@@ -46,12 +48,19 @@ acct._KeyfileAccount__cached_key
 contract address - `0xC3be2A551483c2366101122399D7ac210a288B04`
 
 ```bash
+ape compile
 ape run deploy --network ethereum:holesky:node
 ```
 
+
+Interact with contract
+```bash
+ape console --network ethereum:holesky:node
+```
 ```python
 a = accounts.load("test_acc")
-c = Contract("0xC3be2A551483c2366101122399D7ac210a288B04")
+a.unlock()
+c = Contract("0xe4cF57262DE8C19c83f68AaF0379374D310DE5A6")
 c.retrieve()
 # 0
 c.store(4, sender=a)

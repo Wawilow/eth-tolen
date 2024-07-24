@@ -2,8 +2,8 @@ from ape import Contract, accounts
 
 
 def main():
-    a = accounts.load("test_acc")
+    a = accounts.load("a2")
     a.unlock()
-    a2 = accounts.load("a2")
-    c = Contract("0xe4cF57262DE8C19c83f68AaF0379374D310DE5A6")
-    c.transfer("0x6669a333e0c2b5911C2dfe3f64867832684175c1", 1 * (10 ** 18), sender=a)
+    a2 = accounts.load("test_acc")
+    c = Contract("0xDB413C04D1A956f7Aa5812b8ab70CB08D798b014")
+    c.transfer(a2, 1 * (10 ** 18), sender=a)

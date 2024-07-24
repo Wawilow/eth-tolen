@@ -60,7 +60,7 @@ ape console --network ethereum:holesky:node
 ```python
 a = accounts.load("test_acc")
 a.unlock()
-c = Contract("0x22C8826266f3A2Ae0EF992a0F45c9307744f5fa8")
+c = Contract("0x0A73793A8aC02fd152AE0A626354a06aB330841f")
 c.retrieve()
 # 0
 c.store(4, sender=a)

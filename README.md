@@ -205,7 +205,7 @@ ape plugins install tokens
 
 Go to testnet console
 ```bash
-ape console --network ethereum:holesky:node
+ape console --network ethereum:holesky:https://ethereum-holesky-rpc.publicnode.com
 ```
 Get gas - go to the `https://holesky-faucet.pk910.de/`, verify your wallet with something like github or what ever `passport.gitcoin.co` and collect some gas.
 
@@ -225,25 +225,43 @@ acct._KeyfileAccount__cached_key
 ```
 
 # Ape deploy
-contract address - `0xC3be2A551483c2366101122399D7ac210a288B04`
-
 ```bash
 ape compile
-ape run deploy --network ethereum:holesky:node
+ape run deploy --network ethereum:holesky:https://ethereum-holesky-rpc.publicnode.com
 ```
 
 
 Interact with contract
 ```bash
-ape console --network ethereum:holesky:node
+ape console --network ethereum:holesky:https://ethereum-holesky-rpc.publicnode.com
 ```
 ```python
+# set constants
 a = accounts.load("test_acc")
+a2 = accounts.load("a2")
 a.unlock()
-c = Contract("0x0A73793A8aC02fd152AE0A626354a06aB330841f")
-c.retrieve()
-# 0
-c.store(4, sender=a)
-c.retrieve()
-# 4
+a2.unlock()
+c = Contract("0x4ea106ce38e0E8125dD0F6a9155EF80Be0ACEF43")      # IUniswapV2Router02 contract
+c2 = Contract("0x418eA99dBb4802C147EC7913D86F64289EE0C346")     # DJT contracy
+
+# contract is open on start
+
+# sending from owner to test account 1000 coins
+c2.transfer("0x6669a333e0c2b5911C2dfe3f64867832684175c1", 1000 * (10 ** 18), sender=a)
+c.getOwner()    # check what a is the owner
+
+# sending test coin back to owner, to check secure param (basic is false - everyone can send anything)
+c2.transfer("0xAA5EbB1aF4F273e6e2f973622cb9bD61Fb257032", 1 * (10 ** 18), sender=a2)
+
+# set secure param true - only owner or white list users can send coints
+c.updateSecureParam(True, sender=a)
+
+# send coins from not white listed account - function return error
+c2.transfer("0xAA5EbB1aF4F273e6e2f973622cb9bD61Fb257032", 1 * (10 ** 18), sender=a2)
+c2.transfer("0x6669a333e0c2b5911C2dfe3f64867832684175c1", 1 * (10 ** 18), sender=a)      # send coin from owner account
+
+c.allowTransactions("0x6669a333e0c2b5911C2dfe3f64867832684175c1", 1, sender=a)        # allow 1 transaction for not owner account
+c2.transfer("0xAA5EbB1aF4F273e6e2f973622cb9bD61Fb257032", 1 * (10 ** 18), sender=a2)    # send coins from white listed account
+
+c2.transfer("0xAA5EbB1aF4F273e6e2f973622cb9bD61Fb257032", 1 * (10 ** 18), sender=a2)    # send coins from previously white listed account - function return error
 ```

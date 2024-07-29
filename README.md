@@ -241,8 +241,8 @@ a = accounts.load("test_acc")
 a2 = accounts.load("a2")
 a.unlock()
 a2.unlock()
-c = Contract("0x4ea106ce38e0E8125dD0F6a9155EF80Be0ACEF43")      # IUniswapV2Router02 contract
-c2 = Contract("0x418eA99dBb4802C147EC7913D86F64289EE0C346")     # DJT contracy
+c = Contract("0xc91f5Ac42A9f3533DaA6477c1c52e8E00B2A4E3A")      # IUniswapV2Router02 contract
+c2 = Contract("0xEb35afe5E4Dd7013B38D6eb33DcFD524F56503d4")     # DJT contracy
 
 # contract is open on start
 
@@ -260,6 +260,7 @@ c.updateSecureParam(True, sender=a)
 c2.transfer("0xAA5EbB1aF4F273e6e2f973622cb9bD61Fb257032", 1 * (10 ** 18), sender=a2)
 c2.transfer("0x6669a333e0c2b5911C2dfe3f64867832684175c1", 1 * (10 ** 18), sender=a)      # send coin from owner account
 
+c.getAllowTransactions("0x6669a333e0c2b5911C2dfe3f64867832684175c1")
 c.allowTransactions("0x6669a333e0c2b5911C2dfe3f64867832684175c1", 1, sender=a)        # allow 1 transaction for not owner account
 c2.transfer("0xAA5EbB1aF4F273e6e2f973622cb9bD61Fb257032", 1 * (10 ** 18), sender=a2)    # send coins from white listed account
 

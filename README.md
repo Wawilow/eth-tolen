@@ -10,6 +10,7 @@
 - [???](https://archive.trufflesuite.com/guides/pet-shop/)
 - [zepellin](https://ethernaut.zeppelin.solutions/level/1)
 - [geek for geek guide](https://www.geeksforgeeks.org/introduction-to-solidity/?ref=lbp) - it’s always really good
+- [examples]([https://ethernaut.zeppelin.solutions/level/1](https://solidity-by-example.org/sending-ether)/)
 
 [libevm](https://www.libevm.com/) - very small
 
